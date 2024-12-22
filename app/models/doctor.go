@@ -1,10 +1,11 @@
-package main
+package kuro
 
-type Doctors struct {
-    ID int `json:"id"`
+import "gorm.io/gorm"
+
+type Doctor struct {
+    gorm.Model
+    DoctorID int `json:"id" gorm:"unique;primaryKey;autoIncrement"`
     Name string `json:"name"`
     LastName string `json:"last_name"`
-    HospitalID string `json:"hospital_id"`
+    Hospital string `json:"hospital_id"`
 }
-
-
