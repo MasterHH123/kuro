@@ -3,14 +3,18 @@ package main
 import (
 	"net/http"
 
+	"kuro/app/controllers"
 	"kuro/db"
+
 	"github.com/gin-gonic/gin"
 )
 
 func main(){
     router := gin.Default()
     router.GET("/", index)
+    router.Static("/client", "./client")
     router.GET("/db_test", db.DBTestHandler)
+    router.POST("/create_doctor", controllers.CreateDoctor)
 
 
     router.Run("localhost:8080")

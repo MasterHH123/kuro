@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Doctor</title>
+  
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7xD85meCEu93OgA8sg9ExTR+QHg8eyISAdD" 
+    crossorigin="anonymous">
+  
+  <!-- HTMX Script -->
+  <script src="https://unpkg.com/htmx.org"></script>
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h1 class="mb-4 text-center">Create Doctor</h1>
+    
+    <form 
+      hx-post="/create_doctor" 
+      hx-target="#result" 
+      hx-swap="innerHTML" 
+      class="p-4 border rounded bg-white shadow-sm"
+    >
+      <div class="mb-3">
+        <label for="name" class="form-label">First Name</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="name" 
+          name="name" 
+          placeholder="Enter doctor's first name" 
+          required>
+      </div>
+      <div class="mb-3">
+        <label for="last_name" class="form-label">Last Name</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="last_name" 
+          name="last_name" 
+          placeholder="Enter doctor's last name" 
+          required>
+      </div>
+      <div class="mb-3">
+        <label for="hospital" class="form-label">Hospital</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="hospital" 
+          name="hospital" 
+          placeholder="Enter hospital name" 
+          required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </form>
+    
+    <div id="result" class="mt-4"></div>
+  </div>
+
+  <!-- Bootstrap JS (Optional, for extra interactivity) -->
+  <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoJpAJMDcHgODhHhxy5knwxRNjEJOZnI+CBtgWdP3f4b3xd" 
+    crossorigin="anonymous">
+  </script>
+</body>
+</html>
+

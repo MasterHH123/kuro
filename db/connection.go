@@ -26,8 +26,8 @@ func DBConnection() (*pgx.Conn, error) {
     conn, err := pgx.Connect(context.Background(), db_URL)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-        os.Exit(1)
     }
+    defer conn.Close(context.Background())
 
     return conn, nil
 }
@@ -38,7 +38,6 @@ func DBTestHandler(c *gin.Context) {
         c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err})
         return
     }
-    defer conn.Close(context.Background())
 
     c.IndentedJSON(http.StatusOK, gin.H{"message": "Database connection successful!", "Connection": conn})
 

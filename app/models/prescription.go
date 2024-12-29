@@ -1,4 +1,4 @@
-package kuro
+package models
 
 import (
     "time"
