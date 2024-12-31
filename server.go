@@ -16,7 +16,9 @@ func main(){
     router.GET("/", index)
     router.GET("/HTMXTest", HTMXTestRoute)
     router.GET("/db_test", db.DBTestHandler)
+    router.GET("/create_doctor", createDoctor)
     router.POST("/create_doctor", controllers.CreateDoctor)
+    router.GET("/search_hospitals", controllers.SearchHospital)
 
 
     router.Run("localhost:8080")
@@ -25,6 +27,11 @@ func main(){
 func index (c *gin.Context){
     response := gin.H{"message": "kuro's index page"}
     c.HTML(http.StatusOK, "index.html", response)
+}
+
+func createDoctor(c *gin.Context) {
+    response := gin.H{"message": "create doctor route reached"}
+    c.HTML(http.StatusOK, "create_doctor.html", response)
 }
 
 func HTMXTestRoute (c *gin.Context)  {

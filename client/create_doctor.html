@@ -17,33 +17,16 @@
     <form hx-post="/create_doctor" hx-target="#result" hx-swap="innerHTML" class="p-4 border rounded bg-white shadow-sm">
       <div class="mb-3">
         <label for="name" class="form-label">First Name</label>
-        <input 
-          type="text" 
-          class="form-control" 
-          id="name" 
-          name="name" 
-          placeholder="Enter doctor's first name" 
-          required>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter doctor's first name" required>
       </div>
       <div class="mb-3">
         <label for="last_name" class="form-label">Last Name</label>
-        <input 
-          type="text" 
-          class="form-control" 
-          id="last_name" 
-          name="last_name" 
-          placeholder="Enter doctor's last name" 
-          required>
+        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter doctor's last name" required>
       </div>
-      <div class="mb-3">
+      <div class="mb-3" id="hospital-search">
         <label for="hospital" class="form-label">Hospital</label>
-        <input 
-          type="text" 
-          class="form-control" 
-          id="hospital" 
-          name="hospital" 
-          placeholder="Enter hospital name" 
-          required>
+        <input hx-get="/search_hospitals" hx-trigger="input changed delay:500ms, hospital" hx-target="#hospital-results" type="search" class="form-control" id="hospital" name="hospital" placeholder="Type to Search Hospitals" required>
+        <div id="hospital-results" class="mt-2"></div>
       </div>
       <button type="submit" class="btn btn-primary w-100">Submit</button>
     </form>
