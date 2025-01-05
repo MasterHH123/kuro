@@ -10,6 +10,7 @@ import (
 )
 
 func main(){
+    db.Migration()
     router := gin.Default()
     router.LoadHTMLGlob("client/*.html")
 

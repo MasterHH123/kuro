@@ -16,14 +16,13 @@ func DBConnection() (*pgx.Conn, error) {
     if err != nil {
         return nil, fmt.Errorf("Error loading .env file: %v", err)
     }
-    
 
-    db_URL := os.Getenv("DB_URL")
-    if db_URL == "" {
+    dbURL := os.Getenv("DB_URL")
+    if dbURL == "" {
         return nil, fmt.Errorf("Database URL is not set correctly.\n")
     }
 
-    conn, err := pgx.Connect(context.Background(), db_URL)
+    conn, err := pgx.Connect(context.Background(), dbURL)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
     }
