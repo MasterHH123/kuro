@@ -16,13 +16,17 @@ func Migration() {
     }
     defer conn.Close(context.Background())
 
+    if err := conn.Ping(context.Background()); err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to ping database: %v\n", err)
+    }
+
     createHospitalsTable := `
         Create Table If Not Exists Hospitals (
             HospitalID uuid Primary Key Not Null,
             Name varchar(250) Not Null,
             Address varchar(250) Not Null,
             City varchar(250) Not Null
-        );
+        )
     `
 
     _, err = conn.Exec(context.Background(), createHospitalsTable)
@@ -33,11 +37,11 @@ func Migration() {
     fmt.Println("Create hospital table query successful!!")
 
     createDoctorsTable := `
-        Create Table Doctors If Not Exists (
+        Create Table If Not Exists Doctors (
             DoctorID uuid Primary Key Not Null,
-            Name varchar(250),
-            LastName varchar(250),
-            Hospital uuid references HospitalID(Hospitals),
+            Name varchar(250) Not Null,
+            LastName varchar(250) Not Null,
+            Hospital uuid references Hospitals(HospitalID) On Delete Cascade
         )
     `
     _, err = conn.Exec(context.Background(), createDoctorsTable)
@@ -48,15 +52,15 @@ func Migration() {
     fmt.Println("Create doctors table query successful!!")
 
     createPatientsTable := `
-        Create Table Patients If Not Exists (
+        Create Table If Not Exists Patients (
             PatientID uuid Primary Key Not Null,
-            Name varchar(250),
-            LastName varchar(250),
-            Address varchar(250),
-            Phone varchar(250),
-            Age int,
-            Doctor uuid references DoctorID(Doctors),
-            Hospital uuid references HospitalID(Hospitals),
+            Name varchar(250) Not Null,
+            LastName varchar(250) Not Null,
+            Address varchar(250) Not Null,
+            Phone varchar(250) Not Null,
+            Age int Not Null,
+            Doctor uuid references Doctors(DoctorID) On Delete Cascade,
+            Hospital uuid references Hospitals(HospitalID) On Delete Cascade
         )
     `
     _, err = conn.Exec(context.Background(), createPatientsTable)
@@ -67,13 +71,13 @@ func Migration() {
     fmt.Println("Create patient table query successful!!")
 
     createFamilyMembersTable := `
-        Create Table FamilyMemebers If Not Exists (
+        Create Table  If Not Exists FamilyMembers (
             FamilyMemberID uuid Primary Key Not Null,
-            Name varchar(250),
-            LastName varchar(250),
-            Phone varchar(250),
-            Email varchar(250),
-            Patient uuid references PatientID(Patients)
+            Name varchar(250) Not Null,
+            LastName varchar(250) Not Null,
+            Phone varchar(250) Not Null,
+            Email varchar(250) Not Null,
+            Patient uuid references Patients(PatientID) On Delete Cascade
         )
     `
     
@@ -85,11 +89,11 @@ func Migration() {
     fmt.Println("Create family members table query succesful!")
 
     createPrescriptionsTable := `
-        Create Table Prescriptions If Not Exists (
+        Create Table If Not Exists Prescriptions (
             PrescriptionID uuid Primary Key Not Null,
-            Doctor uuid references DoctorID(Doctors), 
-            Patient uuid references PatientID(Patients),
-            Date date,
+            Doctor uuid references Doctors(DoctorID) On Delete Cascade, 
+            Patient uuid references Patients(PatientID) On Delete Cascade,
+            Date date Not Null
         )
     `
     _, err = conn.Exec(context.Background(), createPrescriptionsTable)
@@ -100,10 +104,10 @@ func Migration() {
     fmt.Println("Create prescriptions table query successful!")
 
     createMedicineTable := `
-        Create Table Medicines If Not Exists (
+        Create Table If Not Exists Medicines (
             MedicineID uuid Primary Key Not Null,
-            Name varchar(250),
-            ActiveIngredient varchar(250),
+            Name varchar(250) Not Null,
+            ActiveIngredient varchar(250) Not Null
         )
     `
     _, err = conn.Exec(context.Background(), createMedicineTable)
@@ -114,10 +118,12 @@ func Migration() {
     fmt.Println("Create medicines table query successful!")
 
     createPrescriptionsDetailsTable := `
-        PrescriptionDetailsID uuid Primary Key Not Null,
-        Prescription uuid references PrescriptionID(Prescriptions),
-        Medicine uuid references MedicineID(Medicines),
-        TimesPerDaty,
+        Create Table If Not Exists PrescriptionDetails (
+            PrescriptionDetailsID uuid Primary Key Not Null,
+            Prescription uuid references Prescriptions(PrescriptionID) On Delete Cascade,
+            Medicine uuid references Medicines(MedicineID) On Delete Cascade,
+            TimesPerDay int Not Null
+        )
     `
 
     _, err = conn.Exec(context.Background(), createPrescriptionsDetailsTable)

@@ -26,7 +26,6 @@ func DBConnection() (*pgx.Conn, error) {
     if err != nil {
         fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
     }
-    defer conn.Close(context.Background())
 
     return conn, nil
 }
