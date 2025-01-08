@@ -26,12 +26,11 @@
       <div class="mb-3" id="hospital-search">
         <label for="hospital" class="form-label">Hospital</label>
         <input hx-get="/search_hospitals" hx-trigger="input changed delay:500ms, hospital" hx-target="#hospital-results" type="search" class="form-control" id="hospital" name="hospital" placeholder="Type to Search Hospitals" required>
-        <div id="hospital-results" class="mt-2"></div>
+        <div id="hospital-results" class="mt-2">
+        </div>
       </div>
       <button type="submit" class="btn btn-primary w-100">Submit</button>
     </form>
-    
-    <div id="result" class="mt-4"></div>
   </div>
 
   <script 

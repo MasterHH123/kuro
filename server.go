@@ -19,7 +19,10 @@ func main(){
     router.GET("/db_test", db.DBTestHandler)
     router.GET("/create_doctor", createDoctor)
     router.POST("/create_doctor", controllers.CreateDoctor)
+    router.GET("/add_hospital_form", controllers.AddHospitalForm)
+    router.GET("/select_hospital/:id", controllers.SelectHospital)
     router.GET("/search_hospitals", controllers.SearchHospital)
+    router.POST("add_hospital", controllers.CreateHospital)
 
 
     router.Run("localhost:8080")

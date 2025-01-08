@@ -1,0 +1,7 @@
+<ul class="list-group">
+  {{ range .results }}
+  <li class="list-group-item list-group-item-action" hx-get="/select_hospital/{{ .id }}" hx-target="#hospital" hx-swap="outerHTML">
+    {{ .name }}
+  </li>
+  {{ end }}
+</ul>
