@@ -39,8 +39,8 @@ func CreateHospital(c *gin.Context) {
     fmt.Println("HospitalValues calling it by name: \n", HospitalValues)
     fmt.Println("HospitalValues calling it by reference: \n", &HospitalValues)
     fmt.Println("---HospitalValues iterating over the map---\n")
-    for v := range HospitalValues {
-        fmt.Println("%s\n", v)
+    for k, v := range HospitalValues {
+        fmt.Println("%s: %s\n", k, v)
     }
     query := `
         Insert Into Hospitals (HospitalID, Name, Address, City) Values($1, $2, $3, $4)
@@ -95,7 +95,7 @@ func SearchHospital(c *gin.Context) {
         })
         return
     }
-    c.HTML(http.StatusOK, "selected_hospital.html", gin.H{"results": results})
+    c.HTML(http.StatusOK, "hospital_results.html", gin.H{"results": results})
 
 }
 
@@ -108,6 +108,7 @@ func SelectHospital(c *gin.Context) {
     }
     defer conn.Close(context.Background())
 
+    fmt.Println("HospitalID: %s", hospitalID)
     query := `Select Name From Hospitals Where HospitalID = $1`
     var hospitalName string
     err = conn.QueryRow(context.Background(), query, hospitalID).Scan(&hospitalName)

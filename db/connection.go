@@ -1,4 +1,4 @@
-oackage db
+package db
 
 import (
 	"context"

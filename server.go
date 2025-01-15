@@ -22,7 +22,7 @@ func main(){
     router.GET("/add_hospital_form", controllers.AddHospitalForm)
     router.GET("/select_hospital/:id", controllers.SelectHospital)
     router.GET("/search_hospitals", controllers.SearchHospital)
-    router.POST("add_hospital", controllers.CreateHospital)
+    router.POST("/add_hospital", controllers.CreateHospital)
 
 
     router.Run("localhost:8080")

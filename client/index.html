@@ -16,7 +16,7 @@
             Click the button to see what happens!! (It's magic lad)
         </h1>
 
-        <button hx-get="/HTMXTest" hx-target="#response" hx-swap="innerHTML" class="btn btn-primary">
+        <button hx-get="/HTMXTest" hx-target="#response" hx-swap="innerHTML" hx-on="htmx:afterRequest: this.remove()" class="btn btn-primary">
             Click Me!
         </button>
 
