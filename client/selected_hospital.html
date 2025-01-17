@@ -1,2 +1,2 @@
-<input class="form-control" id="hospital" name="hospital" value="{{ .hospital }}" readonly>
+<input class="form-control" hx-trigger="input changed delay:500ms, hospital" id="hospital" name="hospital" value="{{ .hospital }}">
 

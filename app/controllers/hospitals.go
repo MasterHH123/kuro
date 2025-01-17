@@ -36,11 +36,8 @@ func CreateHospital(c *gin.Context) {
         "Hospital Address": input.Address,
         "City": input.City,
     }
-    fmt.Println("HospitalValues calling it by name: \n", HospitalValues)
-    fmt.Println("HospitalValues calling it by reference: \n", &HospitalValues)
-    fmt.Println("---HospitalValues iterating over the map---\n")
     for k, v := range HospitalValues {
-        fmt.Println("%s: %s\n", k, v)
+        fmt.Println(k, v)
     }
     query := `
         Insert Into Hospitals (HospitalID, Name, Address, City) Values($1, $2, $3, $4)
@@ -63,6 +60,10 @@ func SearchHospital(c *gin.Context) {
     defer conn.Close(context.Background())
 
     searchQuery := c.Query("hospital")
+    if searchQuery == "" {
+        c.String(http.StatusBadRequest, "Hospital cannot be empty")
+        return
+    }
     fmt.Println("Value of searchQuery: %s\n", searchQuery)
 
     query := `Select HospitalID, Name

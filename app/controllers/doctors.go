@@ -2,13 +2,15 @@ package controllers
 
 import (
 	"context"
-	"kuro/db"
+	"fmt"
 	"kuro/app/models"
+	"kuro/db"
 
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func CreateDoctor(c *gin.Context){
@@ -23,32 +25,40 @@ func CreateDoctor(c *gin.Context){
         c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Database connection unsuccessful", "error": err.Error()})
     }
     defer conn.Close(context.Background())
-
-    query := `Select HospitalID
+    
+    DoctorID := uuid.New()
+    DoctorValues := map[string] string {
+        "Doctor Name": input.Name,
+        "Doctor Last Name": input.LastName,
+        "Hospital": input.Hospital,
+    }
+    for k, v := range DoctorValues {
+        fmt.Printf("%s: %s\n", k, v)
+    }
+    var HospitalID string
+    hospitalIDQuery := `Select HospitalID
         From Hospitals
         Where Name = $1
-    `
-    var HospitalID int
-    err = conn.QueryRow(context.Background(), query, input.Hospital).Scan(&HospitalID)
+        `
+    err = conn.QueryRow(context.Background(), hospitalIDQuery, input.Hospital).Scan(&HospitalID)
     if err != nil {
-        //hospital doesn't exists so I create it.
-        query = `Insert into Hospital (name) Values ($1) Returning id`
-        err = conn.QueryRow(context.Background(), query, input.Hospital).Scan(&input.Hospital)
-        if err != nil {
-            c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Failed to create hospital", "Reason": err.Error()})
-            return
-        }
+        c.String(http.StatusInternalServerError, "error\n", err.Error())
+        fmt.Println(http.StatusInternalServerError, "error", err.Error())
     }
-    query = `
-        Insert into doctors (Name, LastName, Hospital) Values($1, $2, $3) Returning id`
-        var doctorID int
-        err = conn.QueryRow(context.Background(), query, input.Name, input.LastName, input.Hospital).Scan(&doctorID)
+    fmt.Println("HospitalID: ", HospitalID)
+    query := `
+        Insert into doctors (DoctorID, Name, LastName, Hospital) Values($1, $2, $3, $4)
+        `
+        _, err = conn.Exec(context.Background(), query, DoctorID, input.Name, input.LastName, HospitalID)
         if err != nil {
             c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Failed to create doctor account", "error": err.Error()})
             return
         }
 
-        c.IndentedJSON(http.StatusCreated, gin.H{"message": "Successfully created account", "doctor_id": doctorID})
+        /*
+        c.IndentedJSON(http.StatusCreated, gin.H{"message": "Successfully created account", "doctor_id": DoctorID})
+        */
+        c.HTML(http.StatusCreated, "doctor_created.html", gin.H{"message": "Successfully created account", "doctor_id": DoctorID})
 }
 
 func GetDoctorByID(c *gin.Context){
