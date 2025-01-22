@@ -24,6 +24,19 @@ func CreateHospital(c *gin.Context) {
         return
     }
 
+    HospitalValues := map[string]string{
+        "Hospital Name": input.Name,
+        "Hospital Address": input.Address,
+        "City": input.City,
+    }
+    for k, v := range HospitalValues {
+        if v == "" {
+            c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Input values cannot be empty."})
+            return
+        }
+        fmt.Println(k, v)
+    }
+
     conn, err := db.DBConnection()
     if err != nil {
         c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Database connection unsuccessful"})
@@ -31,14 +44,6 @@ func CreateHospital(c *gin.Context) {
     defer conn.Close(context.Background())
 
     HospitalID := uuid.New()
-    HospitalValues := map[string]string{
-        "Hospital Name": input.Name,
-        "Hospital Address": input.Address,
-        "City": input.City,
-    }
-    for k, v := range HospitalValues {
-        fmt.Println(k, v)
-    }
     query := `
         Insert Into Hospitals (HospitalID, Name, Address, City) Values($1, $2, $3, $4)
     `
